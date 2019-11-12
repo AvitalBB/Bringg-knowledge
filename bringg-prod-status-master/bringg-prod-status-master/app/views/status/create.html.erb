@@ -1,0 +1,16 @@
+<div class="create-new-status-wrapper">
+  <div class="create-new-status">
+    <div class="header">Create new status</div>
+
+
+    <%= form_tag "/status/create" do %>
+        <div class="field-set"><label>Incident Description</label><%= text_area_tag "incident_description", nil, rows: 10, cols: 25 %></div>
+        <div class="field-set"><label>Incident Date</label><%= datetime_select  "incident_date", nil %></div>
+        <div class="field-set"><label>Incident Origin</label><%= select(nil, "incident_origin", Status::ORIGINS, {:include_blank => true}) %></div>
+        <%= submit_tag "Save" %>
+    <% end %>
+
+    <button type="button" class="button"><%= link_to 'Back', root_path %></button>
+
+  </div>
+</div>

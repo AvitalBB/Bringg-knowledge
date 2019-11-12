@@ -1,0 +1,58 @@
+<div>
+  <h2>Last Production Issue Incident Was</h2>
+
+  <div class="flip-counter clock flip-clock-wrapper"></div>
+  <div class="incident-description-wrapper">
+    <div class="inner-wrapper">
+      <div class="panel">
+        <h3>Incident Description</h3>
+        <span class="description"><%= @status.incident_description %></span>
+        <span class="date">Date: <%= @status.incident_date.to_formatted_s(:short) %></span>
+        <span class="origin">Origin: <%= @status.get_origin_label %></span>
+        <span class="created_by">Reporter: <%= @status.user.email %></span>
+      </div>
+
+      <div class="panel incidents-list">
+        <h3>Last 10 Incidents</h3>
+        <ul>
+          <% @last_ten.each do |incident| %>
+              <li class="incident-item">
+                <div class="date"><%= incident.incident_date.to_formatted_s(:short) %></div>
+                |
+                <div class="description"><%= incident.incident_description %></div>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button type="button" class="button"><%= link_to 'NEW INCIDENT', status_create_path %></button>
+    </div>
+  </div>
+
+  <script>
+
+      var clock;
+      $(document).ready(function () {
+          var currentDate = new Date();
+
+          var pastDate = new Date(<%= @status.incident_date.to_i * 1000%>);
+
+          var diff = currentDate.getTime() / 1000 - pastDate.getTime() / 1000;
+          var diffInDays = currentDate.getTime() / 24 - pastDate.getTime() / 24;
+
+          clock = $('.clock').FlipClock(diff, {
+              clockFace: 'DailyCounter'
+          });
+
+
+          var a = moment(currentDate);
+          var b = moment(pastDate);
+          var diffDays = Math.abs(b.diff(a, 'days'));
+          var backgroundBodyColors = ['D0021B', 'F5A623', '417505', '4A90E2', '1F1F1F'];
+          var colorPos = diffDays > backgroundBodyColors.length ? backgroundBodyColors.length : diffDays;
+          $("body").css("background-color", '#' + backgroundBodyColors[colorPos]);
+      });
+  </script>
+</div>
